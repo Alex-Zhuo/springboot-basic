@@ -31,8 +31,8 @@ public class UserController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userId", value = "用户ID", dataType = "Long", paramType = "query")
     })
-    public Result exception(Long userId) {
-        return Result.success(userService.getById(userId));
+    public Result getUserById(Long userId) {
+        return Result.success(userService.getUserById(userId));
     }
 
 
