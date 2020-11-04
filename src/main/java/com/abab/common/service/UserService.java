@@ -1,8 +1,11 @@
 package com.abab.common.service;
 
 import com.abab.common.entity.User;
-import com.abab.common.entity.basic.Page;
+import com.abab.common.entity.base.Page;
+import com.abab.common.entity.base.Result;
+import com.abab.common.enums.ResponseCode;
 import com.abab.common.mapper.UserMapper;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -31,5 +34,30 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         Integer count = this.baseMapper.selectCount(Wrappers.<User>lambdaQuery().eq(User::getStatus, 1));
         page.setTotal(count);
         return page;
+    }
+
+    public Result login(String username,String password) {
+        if (username == null || username == null) {
+            return Result.error(ResponseCode.INVALID_PARAM);
+        }
+        LambdaQueryWrapper<User> wrapper = Wrappers.lambdaQuery();
+        wrapper.eq(User::getUsername, username);
+        User u = this.baseMapper.selectOne(wrapper);
+        if (u == null) {
+            return Result.error(ResponseCode.USER_NOT_EXIST);
+        }
+        if (!u.getPassword().equals(password)) {
+            return Result.error(ResponseCode.USER_PWD_ERROR);
+        }
+        if (u.getStatus() == 0) {
+            return Result.error(ResponseCode.USER_IS_DISABLED);
+        }
+        //String token = JWTUtil.generateToken(u);
+        return Result.success(new JSONObject() {{
+            put("id", u.getId());
+            put("username", u.getUsername());
+            put("roles", "admin");
+            put("token", "token");
+        }});
     }
 }

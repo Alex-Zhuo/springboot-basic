@@ -1,4 +1,4 @@
-package com.abab.common.entity.basic;
+package com.abab.common.entity.base;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;

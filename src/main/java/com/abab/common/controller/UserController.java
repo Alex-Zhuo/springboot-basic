@@ -1,7 +1,7 @@
 package com.abab.common.controller;
 
-import com.abab.common.entity.basic.Page;
-import com.abab.common.entity.basic.Result;
+import com.abab.common.entity.base.Page;
+import com.abab.common.entity.base.Result;
 import com.abab.common.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -40,5 +40,11 @@ public class UserController {
     @ApiOperation("获取所有用户")
     public Result listUser(@Valid @RequestBody Page page) {
         return Result.success(userService.listUser(page));
+    }
+
+    @PostMapping(value = "/login")
+    @ApiOperation("登录")
+    public Result listUser(String username, String password) {
+        return userService.login(username, password);
     }
 }

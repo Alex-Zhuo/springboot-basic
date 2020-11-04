@@ -1,5 +1,6 @@
 package com.abab.common.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
@@ -43,4 +44,8 @@ public class User {
 
     @ApiModelProperty(value = "状态：0.禁用；1.启用")
     private Integer status;
+
+    @TableField(exist = false)
+    @ApiModelProperty(value = "角色名称")
+    private String roleName;
 }
