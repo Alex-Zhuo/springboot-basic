@@ -16,8 +16,8 @@ import java.util.Date;
 @Data
 public class User {
 
-    @JsonFormat(shape= JsonFormat.Shape.STRING)
-    @ApiModelProperty(value = "用户ID",example = "1234567898765432101")
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    @ApiModelProperty(value = "用户ID", example = "1234567898765432101")
     private Long id;
 
     @ApiModelProperty(value = "用户名称")
@@ -33,12 +33,12 @@ public class User {
     @ApiModelProperty(value = "创建时间")
     //入参格式化 @DateTimeFormat(pattern = "yyyy-MM-dd")
     //出参格式化
-    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     @ApiModelProperty(value = "更新时间")
     //出参格式化
-    @JsonFormat(timezone = "GMT+8",pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
 
     @ApiModelProperty(value = "状态：0.禁用；1.启用")
