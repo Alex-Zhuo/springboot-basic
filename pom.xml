@@ -22,6 +22,8 @@
         <freemarker.version>2.3.28</freemarker.version>
         <javax-validation.version>2.0.1.Final</javax-validation.version>
         <jwt-version>3.9.0</jwt-version>
+        <fastjson-version>1.2.68</fastjson-version>
+        <aspectj-version>1.9.2</aspectj-version>
     </properties>
 
     <dependencies>
@@ -91,6 +93,16 @@
             <version>${jwt-version}</version>
         </dependency>
         <!-- jwt end -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>${fastjson-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>${aspectj-version}</version>
+        </dependency>
     </dependencies>
 
     <build>
