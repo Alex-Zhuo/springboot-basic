@@ -23,7 +23,7 @@
         <javax-validation.version>2.0.1.Final</javax-validation.version>
         <jwt-version>3.9.0</jwt-version>
         <fastjson-version>1.2.68</fastjson-version>
-        <aspectj-version>1.9.2</aspectj-version>
+        <aspectj-version>1.9.6</aspectj-version>
     </properties>
 
     <dependencies>
@@ -100,7 +100,7 @@
         </dependency>
         <dependency>
             <groupId>org.aspectj</groupId>
-            <artifactId>aspectjrt</artifactId>
+            <artifactId>aspectjweaver</artifactId>
             <version>${aspectj-version}</version>
         </dependency>
     </dependencies>

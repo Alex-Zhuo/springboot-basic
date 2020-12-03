@@ -3,14 +3,18 @@ package com.abab.common.config;
 import com.abab.common.entity.base.Result;
 import com.abab.common.enums.ResponseCode;
 import com.abab.common.exception.BusinessException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -27,7 +31,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class GlobalExceptionHandler {
 
-    @Autowired
+    @Resource
     private HttpServletRequest request;
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -56,6 +60,30 @@ public class GlobalExceptionHandler {
         return Result.error(ResponseCode.INVALID_PARAMETER.getCode(), message);
     }
 
+    @ExceptionHandler(BindException.class)
+    public Result<Void> exceptionHandler(BindException e) {
+        return Result.error(ResponseCode.INVALID_PARAM.getCode(), e.getMessage());
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseBody
+    public Result<Void> userExceptionHandler(IllegalArgumentException e) {
+        return Result.error(ResponseCode.INVALID_PARAM.getCode(), e.getMessage());
+    }
+
+    @ExceptionHandler(TokenExpiredException.class)
+    @ResponseBody
+    public Result<Void> tokenExpiredHandler(TokenExpiredException e) {
+        log.info("accessToken已失效：", e.getMessage());
+        return Result.error(ResponseCode.INVALID_TOKEN);
+    }
+
+    @ExceptionHandler(JWTVerificationException.class)
+    @ResponseBody
+    public Result<Void> jwtVerificationException(JWTVerificationException e) {
+        log.info("accessToken校验失败：", e.getMessage());
+        return Result.error(ResponseCode.UN_AUTHENTICATION);
+    }
 
     @ExceptionHandler(BusinessException.class)
     @ResponseBody
