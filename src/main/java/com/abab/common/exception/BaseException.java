@@ -1,6 +1,6 @@
 package com.abab.common.exception;
 
-import com.abab.common.entity.basic.Result;
+import com.abab.common.entity.base.Result;
 import com.abab.common.enums.ResponseCode;
 import lombok.Getter;
 

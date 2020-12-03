@@ -1,6 +1,6 @@
 package com.abab.common.enums;
 
-import com.abab.common.entity.basic.Result;
+import com.abab.common.entity.base.Result;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -57,7 +57,7 @@ public class JwtUtil {
         return new Date(System.currentTimeMillis() + sysConfig.getTokenExpiration());
     }
 
-    public Long getUserId(){
+    public Long getUserId() {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
         return getUserIdByRequest(request);

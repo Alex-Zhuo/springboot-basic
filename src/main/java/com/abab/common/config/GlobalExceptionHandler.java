@@ -1,6 +1,6 @@
 package com.abab.common.config;
 
-import com.abab.common.entity.basic.Result;
+import com.abab.common.entity.base.Result;
 import com.abab.common.enums.ResponseCode;
 import com.abab.common.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;

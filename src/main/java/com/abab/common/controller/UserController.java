@@ -1,7 +1,7 @@
 package com.abab.common.controller;
 
-import com.abab.common.entity.basic.Page;
-import com.abab.common.entity.basic.Result;
+import com.abab.common.entity.base.Page;
+import com.abab.common.entity.base.Result;
 import com.abab.common.exception.BusinessException;
 import com.abab.common.service.UserService;
 import io.swagger.annotations.*;

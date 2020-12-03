@@ -2,12 +2,12 @@ package com.abab.common.service;
 
 import com.abab.common.config.SysConfig;
 import com.abab.common.entity.User;
-import com.abab.common.entity.basic.Page;
-import com.abab.common.entity.basic.Result;
 import com.abab.common.enums.ResponseCode;
 import com.abab.common.exception.BusinessException;
 import com.abab.common.mapper.UserMapper;
 import com.abab.common.util.JwtUtil;
+import com.abab.common.entity.base.Page;
+import com.abab.common.entity.base.Result;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;

@@ -1,4 +1,4 @@
-package com.abab.common.entity.basic;
+package com.abab.common.entity.base;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
@@ -47,7 +47,7 @@ public class Page<T> {
     @ApiModelProperty(value = "每页显示数量")
     @Min(value = 1, message = "请输入正确的数量")
     private Integer size;
-    
+
     /**
      * 设置MySQL查询中 limit offset
      */
