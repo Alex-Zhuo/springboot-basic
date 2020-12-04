@@ -1,6 +1,8 @@
 package com.abab.common.controller;
 
+import com.abab.common.entity.base.Result;
 import io.swagger.annotations.Api;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,4 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/order")
 public class OrderController {
 
+    @GetMapping("test")
+    public Result<String> test(){
+        return Result.success("suafdjh");
+    }
 }

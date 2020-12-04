@@ -1,5 +1,6 @@
 package com.abab.common.controller;
 
+import com.abab.common.entity.User;
 import com.abab.common.entity.base.Page;
 import com.abab.common.entity.base.Result;
 import com.abab.common.exception.BusinessException;
@@ -29,22 +30,22 @@ public class UserController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userId", value = "用户ID", dataType = "Long", paramType = "query")
     })
-    public Result getUserById(Long userId) {
+    public Result<User> getUserById(Long userId) {
         return Result.success(userService.getUserById(userId));
     }
 
 
     @PostMapping("/listUser")
     @ApiOperation("获取所有用户")
-    public Result listUser(@Valid @RequestBody Page page) {
+    public Result<Page<User>> listUser(@Valid @RequestBody Page page) {
         return Result.success(userService.listUser(page));
     }
 
     @GetMapping("/login")
     @ApiOperation("用户登录")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "phone", value = "手机号码", dataType = "String", paramType = "query", required = true),
-            @ApiImplicitParam(name = "code", value = "短信验证码", dataType = "String", paramType = "query", required = true)
+            @ApiImplicitParam(name = "phone", value = "手机号码", dataType = "String", paramType = "query", required = true, example = "15297746757"),
+            @ApiImplicitParam(name = "code", value = "短信验证码", dataType = "String", paramType = "query", required = true, example = "1234")
     })
     @ApiResponses({
             @ApiResponse(code = 0, message = "请求成功，data=>accessToken中为此次请求的token"),
