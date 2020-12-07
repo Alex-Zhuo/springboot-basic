@@ -24,6 +24,8 @@
         <jwt-version>3.9.0</jwt-version>
         <fastjson-version>1.2.68</fastjson-version>
         <aspectj-version>1.9.6</aspectj-version>
+        <httpclient-version>4.5.12</httpclient-version>
+        <swagger-bootstrap-version>1.9.6</swagger-bootstrap-version>
     </properties>
 
     <dependencies>
@@ -106,7 +108,12 @@
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>swagger-bootstrap-ui</artifactId>
-            <version>1.9.6</version>
+            <version>${swagger-bootstrap-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${httpclient-version}</version>
         </dependency>
     </dependencies>
 

@@ -6,6 +6,7 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -76,22 +77,26 @@ public class AspectLog {
     }
 
     private String getParams(JoinPoint joinPoint) {
-        String params = "";
-        if (joinPoint.getArgs() != null && joinPoint.getArgs().length > 0) {
-            for (int i = 0; i < joinPoint.getArgs().length; i++) {
-                Object arg = joinPoint.getArgs()[i];
+        JSONObject params = new JSONObject();
+        // 参数名
+        String[] argNames = ((MethodSignature) joinPoint.getSignature()).getParameterNames();
+        // 参数值
+        Object[] args = joinPoint.getArgs();
+        if (args != null && args.length > 0) {
+            for (int i = 0; i < args.length; i++) {
+                Object arg = args[i];
                 if ((arg instanceof HttpServletResponse) || (arg instanceof HttpServletRequest)
                         || (arg instanceof MultipartFile) || (arg instanceof MultipartFile[])) {
                     continue;
                 }
                 try {
-                    params += JSONObject.toJSONString(joinPoint.getArgs()[i]);
+                    params.put(argNames[i], args[i]);
                 } catch (Exception e1) {
                     log.error(e1.getMessage());
                 }
             }
         }
-        return params;
+        return params.toJSONString();
     }
 
 }
