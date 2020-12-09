@@ -50,7 +50,7 @@ public class SwaggerConfiguration {
                 .title("springboot项目基础框架")
                 .description("springboot项目脚手架")
                 .version("1.0")
-                .contact(new Contact("alex","url","123@idwarf.cn"))
+                .contact(new Contact("alex", "url", "123@idwarf.cn"))
                 .build();
     }
 }

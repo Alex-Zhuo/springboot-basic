@@ -5,6 +5,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import org.springframework.lang.Nullable;
 
+/**
+ * @author alex
+ * @Date: Created in 2020/12/3 9:28
+ * @IDE: Intellij Idea 2020.3
+ * Description:
+ */
+@SuppressWarnings("AlibabaEnumConstantsMustHaveComment")
 public enum HttpStatus {
     CONTINUE(100, "Continue"),
     SWITCHING_PROTOCOLS(101, "Switching Protocols"),
@@ -147,6 +154,7 @@ public enum HttpStatus {
         return this.is4xxClientError() || this.is5xxServerError();
     }
 
+    @Override
     public String toString() {
         return this.value + " " + this.name();
     }
@@ -223,7 +231,7 @@ public enum HttpStatus {
     }
 
     @SneakyThrows
-    public String toJSON() {
+    public String toJson() {
         return new ObjectMapper().writeValueAsString(Result.error(this.value, this.reasonPhrase));
     }
 }

@@ -26,6 +26,7 @@
         <aspectj-version>1.9.6</aspectj-version>
         <httpclient-version>4.5.12</httpclient-version>
         <swagger-bootstrap-version>1.9.6</swagger-bootstrap-version>
+        <jjwt-version>0.11.2</jjwt-version>
     </properties>
 
     <dependencies>
@@ -90,9 +91,21 @@
 
         <!-- jwt start -->
         <dependency>
-            <groupId>com.auth0</groupId>
-            <artifactId>java-jwt</artifactId>
-            <version>${jwt-version}</version>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>${jjwt-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>${jjwt-version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>${jjwt-version}</version>
+            <scope>runtime</scope>
         </dependency>
         <!-- jwt end -->
         <dependency>

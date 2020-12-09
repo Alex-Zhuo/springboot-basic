@@ -70,7 +70,7 @@ public enum ResponseCode {
     private String message;
 
     @SneakyThrows
-    public String toJSON() {
+    public String toJson() {
         return new ObjectMapper().writeValueAsString(Result.error(this.code, this.message));
     }
 }

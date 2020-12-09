@@ -6,7 +6,6 @@ import com.abab.common.enums.ResponseCode;
 import com.abab.common.exception.BusinessException;
 import com.abab.common.service.UserService;
 import com.abab.common.util.JwtUtil;
-import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import lombok.extern.slf4j.Slf4j;
@@ -71,12 +70,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             throw new BusinessException(ResponseCode.UN_AUTHENTICATION);
         }
         // 获取token中的userId
-        Long userId;
-        try {
-            userId = interceptor.jwtUtil.getUserIdByToken(token);
-        } catch (JWTDecodeException j) {
-            throw new BusinessException(ResponseCode.UN_AUTHENTICATION);
-        }
+        Long userId = interceptor.jwtUtil.getUserIdByToken(token);
         LambdaQueryWrapper<User> wrapper = Wrappers.lambdaQuery();
         wrapper.eq(User::getStatus, 1);
         wrapper.eq(User::getId, userId);

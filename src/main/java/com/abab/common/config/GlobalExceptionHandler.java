@@ -3,10 +3,9 @@ package com.abab.common.config;
 import com.abab.common.entity.base.Result;
 import com.abab.common.enums.ResponseCode;
 import com.abab.common.exception.BusinessException;
-import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.exceptions.TokenExpiredException;
+import io.jsonwebtoken.ClaimJwtException;
+import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -71,16 +70,16 @@ public class GlobalExceptionHandler {
         return Result.error(ResponseCode.INVALID_PARAM.getCode(), e.getMessage());
     }
 
-    @ExceptionHandler(TokenExpiredException.class)
+    @ExceptionHandler(ExpiredJwtException.class)
     @ResponseBody
-    public Result<Void> tokenExpiredHandler(TokenExpiredException e) {
+    public Result<Void> tokenExpiredHandler(ExpiredJwtException e) {
         log.info("accessToken已失效：", e.getMessage());
         return Result.error(ResponseCode.INVALID_TOKEN);
     }
 
-    @ExceptionHandler(JWTVerificationException.class)
+    @ExceptionHandler(ClaimJwtException.class)
     @ResponseBody
-    public Result<Void> jwtVerificationException(JWTVerificationException e) {
+    public Result<Void> jwtVerificationException(ClaimJwtException e) {
         log.info("accessToken校验失败：", e.getMessage());
         return Result.error(ResponseCode.UN_AUTHENTICATION);
     }

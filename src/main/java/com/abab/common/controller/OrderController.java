@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrderController {
 
     @GetMapping("test")
-    public Result<String> test(){
+    public Result<String> test() {
         return Result.success("suafdjh");
     }
 }

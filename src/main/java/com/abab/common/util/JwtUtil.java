@@ -2,17 +2,22 @@ package com.abab.common.util;
 
 import com.abab.common.config.SysConfig;
 import com.abab.common.entity.User;
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.DecodedJWT;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
+import javax.crypto.SecretKey;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
 
 /**
  * @author alex
@@ -26,40 +31,111 @@ public class JwtUtil {
     @Resource
     private SysConfig sysConfig;
 
+    public static final String SECRET = "kLHisBAx50Lw60SPtAZhHBEmm8aZHZkZpGdXUzwEyr3PVef6";
+
+    private static SecretKey key = null;
+
+    static {
+        key = Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET));
+    }
+
+    public String getSubjectFromToken(String token) {
+        return getClaimFromToken(token, Claims::getSubject);
+    }
+
+    public Date getIssuedAtDateFromToken(String token) {
+        return getClaimFromToken(token, Claims::getIssuedAt);
+    }
+
+    public Date getExpirationDateFromToken(String token) {
+        return getClaimFromToken(token, Claims::getExpiration);
+    }
+
+    public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = getAllClaimsFromToken(token);
+        return claimsResolver.apply(claims);
+    }
+
+    public Claims getAllClaimsFromToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    public boolean isTokenExpired(String token) {
+        final Date expiration = getExpirationDateFromToken(token);
+        return expiration.before(new Date());
+    }
+
+    private boolean isCreatedBeforeLastPasswordReset(Date created, Date lastPasswordReset) {
+        return (lastPasswordReset != null && created.before(lastPasswordReset));
+    }
+
+    private boolean ignoreTokenExpiration(String token) {
+        // here you specify tokens, for that the expiration is ignored
+        return false;
+    }
+
     public String generateToken(User user) {
-        return JWT
-                .create()
-                .withExpiresAt(getExpirationDate())
-                .withAudience(user.getId().toString())
-                .sign(Algorithm.HMAC256(user.getPhone()));
+        Map<String, Object> claims = new HashMap<String, Object>(2) {{
+            put("userId", user.getId());
+            put("phone", user.getPhone());
+        }};
+        return doGenerateToken(claims, String.valueOf(user.getId()));
     }
 
-    public Long getUserIdByToken(String token) {
-        return Long.valueOf(JWT.decode(token).getAudience().get(0));
+    private String doGenerateToken(Map<String, Object> claims, String subject) {
+        final Date createdDate = new Date();
+        final Date expirationDate = calculateExpirationDate(new Date());
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(subject)
+                .setIssuedAt(createdDate)
+                .setExpiration(expirationDate)
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
     }
 
-    public String getTokenByRequest(HttpServletRequest request) {
-        return request.getHeader(sysConfig.getHeaderToken());
+    public Boolean canTokenBeRefreshed(String token, Date lastPasswordReset) {
+        final Date created = getIssuedAtDateFromToken(token);
+        return !isCreatedBeforeLastPasswordReset(created, lastPasswordReset)
+                && (!isTokenExpired(token) || ignoreTokenExpiration(token));
     }
 
-    public Long getUserIdByRequest(HttpServletRequest request) {
-        String token = getTokenByRequest(request);
-        return getUserIdByToken(token);
+    public String refreshToken(String token) {
+        final Date createdDate = new Date();
+        final Date expirationDate = calculateExpirationDate(createdDate);
+
+        final Claims claims = getAllClaimsFromToken(token);
+        claims.setIssuedAt(createdDate);
+        claims.setExpiration(expirationDate);
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .signWith(key, SignatureAlgorithm.HS256)
+                .compact();
     }
 
     public boolean validateToken(User user, String token) {
-        JWTVerifier jwtVerifier = JWT.require(Algorithm.HMAC256(user.getPhone())).build();
-        DecodedJWT decodedJWT = jwtVerifier.verify(token);
-        return true;
+        //final Date created = getIssuedAtDateFromToken(token);
+        return !isTokenExpired(token);
     }
 
-    private Date getExpirationDate() {
-        return new Date(System.currentTimeMillis() + sysConfig.getTokenExpiration());
+    private Date calculateExpirationDate(Date createdDate) {
+        return new Date(createdDate.getTime() + sysConfig.getTokenExpiration());
+    }
+
+    public Long getUserIdByToken(String token) {
+        Claims claims = getAllClaimsFromToken(token);
+        return Long.valueOf(claims.get("userId").toString());
     }
 
     public Long getUserId() {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
-        return getUserIdByRequest(request);
+        return getUserIdByToken(request.getHeader(sysConfig.getHeaderToken()));
     }
 }

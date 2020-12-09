@@ -41,6 +41,8 @@ import static java.lang.System.out;
  */
 public class HttpHelper {
 
+    public static final String HTTPS = "https://";
+
     public static String httpGet(String url, Header[] headers, Map<String, Object> paramMap) throws IOException {
         if (paramMap != null && !paramMap.isEmpty()) {
             url = url.concat("?");
@@ -55,7 +57,9 @@ public class HttpHelper {
         return httpGet(url, headers);
     }
 
-    // get 请求
+    /**
+     * get 请求
+     */
     public static String httpGet(String url, Header[] headers) throws IOException {
         HttpUriRequest uriRequest = new HttpGet(url);
         if (null != headers) {
@@ -66,7 +70,7 @@ public class HttpHelper {
             httpClient = declareHttpClientSSL(url);
             CloseableHttpResponse httpresponse = httpClient.execute(uriRequest);
             HttpEntity httpEntity = httpresponse.getEntity();
-            String result = EntityUtils.toString(httpEntity, REQ_ENCODEING_UTF8);
+            String result = EntityUtils.toString(httpEntity, REQ_ENCODING_UTF8);
             return result;
         } catch (ClientProtocolException e) {
             out.println(String.format("http请求失败，uri{%s},exception{%s}", new Object[]{url, e}));
@@ -80,13 +84,15 @@ public class HttpHelper {
         return null;
     }
 
-    // post 请求
+    /**
+     * post 请求
+     */
     public static String httpPost(String url, String params) throws Exception {
         HttpPost post = new HttpPost(url);
-        post.addHeader("Content-Type", "application/json;charset=" + REQ_ENCODEING_UTF8);
+        post.addHeader("Content-Type", "application/json;charset=" + REQ_ENCODING_UTF8);
         // 设置传输编码格式
-        StringEntity stringEntity = new StringEntity(params, REQ_ENCODEING_UTF8);
-        stringEntity.setContentEncoding(REQ_ENCODEING_UTF8);
+        StringEntity stringEntity = new StringEntity(params, REQ_ENCODING_UTF8);
+        stringEntity.setContentEncoding(REQ_ENCODING_UTF8);
         post.setEntity(stringEntity);
         HttpResponse httpresponse = null;
         CloseableHttpClient httpClient = null;
@@ -94,7 +100,7 @@ public class HttpHelper {
             httpClient = declareHttpClientSSL(url);
             httpresponse = httpClient.execute(post);
             HttpEntity httpEntity = httpresponse.getEntity();
-            String result = EntityUtils.toString(httpEntity, REQ_ENCODEING_UTF8);
+            String result = EntityUtils.toString(httpEntity, REQ_ENCODING_UTF8);
             return result;
         } catch (ClientProtocolException e) {
             out.println(String.format("http请求失败，uri{%s},exception{%s}", new Object[]{url, e}));
@@ -108,8 +114,9 @@ public class HttpHelper {
         return null;
     }
 
+    @SuppressWarnings("AlibabaLowerCamelCaseVariableNaming")
     private static CloseableHttpClient declareHttpClientSSL(String url) {
-        if (url.startsWith("https://")) {
+        if (url.startsWith(HTTPS)) {
             return sslClient();
         } else {
             return HttpClientBuilder.create().setConnectionManager(httpClientConnectionManager).build();
@@ -146,8 +153,10 @@ public class HttpHelper {
         }
     }
 
-    // this is config
-    private static final String REQ_ENCODEING_UTF8 = "utf-8";
+    /**
+     * this is charset config
+     */
+    private static final String REQ_ENCODING_UTF8 = "utf-8";
     private static PoolingHttpClientConnectionManager httpClientConnectionManager;
 
     public HttpHelper() {
@@ -156,8 +165,8 @@ public class HttpHelper {
         httpClientConnectionManager.setDefaultMaxPerRoute(20);
     }
 
-    // get 请求
     public static String httpGet(String url) throws Exception {
         return httpGet(url, null);
     }
+
 }
