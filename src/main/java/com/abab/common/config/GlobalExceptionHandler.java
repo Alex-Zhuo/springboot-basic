@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -60,13 +61,19 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BindException.class)
-    public Result<Void> exceptionHandler(BindException e) {
+    public Result<Void> bindExceptionHandler(BindException e) {
         return Result.error(ResponseCode.INVALID_PARAM.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseBody
     public Result<Void> userExceptionHandler(IllegalArgumentException e) {
+        return Result.error(ResponseCode.INVALID_PARAM.getCode(), e.getMessage());
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    @ResponseBody
+    public Result<Void> userExceptionHandler(MissingServletRequestParameterException e) {
         return Result.error(ResponseCode.INVALID_PARAM.getCode(), e.getMessage());
     }
 
@@ -93,8 +100,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public Result<Void> unchangedExceptionHandler(Exception e) {
-        log.error("请求url[{}],发生[{}]异常: ", request.getRequestURL(), e.getClass().getName(), e);
-        return Result.error(ResponseCode.SERVER_EXCEPTION.getCode(), e.getMessage());
+        log.error("请求url[{}],发生[{}]异常: {}", request.getRequestURL(), e.getClass().getName(), e);
+        return Result.error(ResponseCode.SERVER_EXCEPTION);
     }
 
 }

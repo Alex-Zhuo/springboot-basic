@@ -51,6 +51,9 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object object) throws BusinessException {
+        if (isFromSwagger(httpServletRequest)) {
+            return true;
+        }
         String token = httpServletRequest.getHeader(interceptor.sysConfig.getHeaderToken());
         // 如果不是映射到方法直接通过
         if (!(object instanceof HandlerMethod)) {
@@ -93,5 +96,11 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
     @Override
     public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) {
+    }
+
+    private boolean isFromSwagger(HttpServletRequest request) {
+        String referer = request.getHeader("Referer");
+        //TODO:set accessToken Header
+        return referer != null && referer.contains("swagger-ui.html");
     }
 }

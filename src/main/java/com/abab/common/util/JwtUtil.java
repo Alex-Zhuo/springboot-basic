@@ -3,6 +3,7 @@ package com.abab.common.util;
 import com.abab.common.config.SysConfig;
 import com.abab.common.entity.User;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -57,11 +58,19 @@ public class JwtUtil {
     }
 
     public Claims getAllClaimsFromToken(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(key)
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        Claims claims = null;
+        try {
+            claims = Jwts.parserBuilder()
+                    //设置签名的秘钥
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (ExpiredJwtException e) {
+            //获取过期token中的claims
+            claims = e.getClaims();
+        }
+        return claims;
     }
 
     public boolean isTokenExpired(String token) {
