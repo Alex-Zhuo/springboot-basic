@@ -19,4 +19,10 @@ public class SysConfig {
 
     @Value("${token.expiration}")
     private Long tokenExpiration;
+
+    @Value("${sign.token}")
+    private String signToken;
+
+    @Value("${api.timeout}")
+    private Integer apiTimeout;
 }

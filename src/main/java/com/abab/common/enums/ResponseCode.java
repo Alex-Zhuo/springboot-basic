@@ -26,8 +26,8 @@ public enum ResponseCode {
      * 模块定义：1->用户模块；2->产品模块；3->订单模块；4->配置模块；5->文件模块；6->微信相关模块
      */
 
-    SUCCESS(0, "成功"),
-    FAIL(-1, "失败"),
+    SUCCESS(0, "OK"),
+    FAIL(-1, "ERROR"),
 
     SERVER_EXCEPTION(10000, "服务端发生未知异常"),
     DATA_NOT_EXIST(10001, "数据不存在"),
@@ -35,8 +35,12 @@ public enum ResponseCode {
     OPERATION_FAILED(1004, "操作失败"),
 
     INVALID_PARAM(40000, "参数错误"),
-    INCOMPLETE_PARAMETERS(40001, "参数不全"),
-    INVALID_PARAMETER(40002, "参数不合法"),
+    HTTP_METHOD_NOT_SUPPORTED(40001, "Request method not supported"),
+    INVALID_TIMESTAMP(40011, "invalid  timestamp"),
+    INVALID_NONCE(40012, "invalid nonce string"),
+    INVALID_SIGNATURE(40013, "invalid signature"),
+    INCOMPLETE_PARAMETERS(40101, "参数不全"),
+    INVALID_PARAMETER(40202, "参数不合法"),
 
     //用户模块501
     UN_AUTHENTICATION(50100, "用户未认证,请先登录"),

@@ -28,6 +28,7 @@ public class WebConfiguration implements WebMvcConfigurer {
                 .excludePathPatterns("/v2/**")
                 .excludePathPatterns("/swagger-resources/**")
                 .addPathPatterns("/**");
+        registry.addInterceptor(new SecurityInterceptor());
     }
 
     /**

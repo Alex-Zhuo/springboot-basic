@@ -64,8 +64,7 @@ public class AspectLog {
             // 打印出参
             log.info("Response Data  : {}", JSONObject.toJSONString(result));
         } catch (Throwable throwable) {
-            /*throwable.printStackTrace();*/
-            log.info("Response ERROR : {}", throwable);
+            log.info("Response ERROR : {}", throwable.getMessage());
             throw throwable;
         } finally {
             // 执行耗时

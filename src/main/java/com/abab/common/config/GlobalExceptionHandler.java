@@ -8,6 +8,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -95,6 +96,12 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public Result<Void> userExceptionHandler(BusinessException e) {
         return Result.error(e.getCode(), e.getMessage());
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    @ResponseBody
+    public Result<Void> httpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
+        return Result.error(ResponseCode.HTTP_METHOD_NOT_SUPPORTED.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(Exception.class)

@@ -41,7 +41,7 @@ public class UserController {
         return Result.success(userService.listUser(page));
     }
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     @ApiOperation("用户登录")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "phone", value = "手机号码", dataType = "String", paramType = "query", required = true, example = "15297746757"),
